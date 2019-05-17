@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 /**
  * Card Class
  */
@@ -11,7 +13,7 @@ public class Card {
 	enum Suit { CLUBS, DIAMONDS, HEARTS, SPADES }
 	enum Rank { JOKER, A, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHTH,
 		NINE, TEN, J, Q, K }
-		
+
 	Suit suit;
 	Rank rank;
 
@@ -49,7 +51,7 @@ public class Card {
 			return this.rank.compareTo(o.rank);
 
 	}
-	
+
 	/**
 	 * Exercise 1
 	 * Checks true if there are any cards in common between two decks.
@@ -58,10 +60,16 @@ public class Card {
 	 * @return
 	 */
 	public static boolean cardInCommon(Card[] deck1, Card[] deck2) {
-		
+		for(int i = 0; i < deck1.length; i++) {
+			for(int j = 0; j < deck2.length; j++) {
+				if(deck1[i].equals(deck2[j])) {
+					return true;
+				}
+			}
+		}
 		return false;
 	}
-	
+
 	/**
 	 * Exercise 2
 	 * Returns a new deck with all the Joker cards removed
@@ -72,10 +80,16 @@ public class Card {
 	 * @return
 	 */
 	public static Card[] removeJokers(Card[] deck, int jokerCount) {
-		
-		return null;
+		//Card[] neu = new Card[deck.length];
+		ArrayList<Card> neue = new ArrayList<Card>();
+		for(int i = 0; i < deck.length; i++) {
+			if(deck[i].rank != Rank.JOKER) {
+				neue.add(deck[i]);
+			}
+		}
+		return neue.toArray(new Card[0]);
 	}
-	
+
 	/**
 	 * Exercise 3
 	 * Returns the High Card (Card with the Highest Value)
@@ -85,10 +99,18 @@ public class Card {
 	 * @return
 	 */
 	public static Card findHighCard(Card[] deck) {
-		
-		return null;
+		if(deck.length == 0) {
+			return null;
+		}
+		Card neue = deck[0];
+		for(int i = 0; i < deck.length; i++) {
+			if(deck[i].compareTo(neue) > 1) {
+				neue = deck[i];
+			}
+		}
+		return neue;
 	}
-	
+
 	/**
 	 * Exercise 4
 	 * Returns true only if the target object is present inside
@@ -97,7 +119,12 @@ public class Card {
 	 * @return
 	 */
 	public boolean isInDeck(Card[] deck) {
-		
+		for(int i = 0; i < deck.length; i++) {
+			if(this == deck[i]) {
+				return true;
+			}
+		}
+
 		return false;
 	}
 
@@ -115,7 +142,11 @@ public class Card {
 	 * @return
 	 */
 	public int cardValue() {
-		
-		return 0;
+		if(this.rank.ordinal() >= 2 && this.rank.ordinal() <= 10) return this.rank.ordinal();
+		if(this.rank == Rank.JOKER) return 0;
+		if(this.rank == Rank.J) return 13;
+		if(this.rank == Rank.Q) return 14;
+		if(this.rank == Rank.K) return 15;
+		return 21;
 	}
 }

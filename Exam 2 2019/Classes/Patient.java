@@ -132,27 +132,18 @@ public class Patient {
 	 * have compatible RH factors.  Returns NULL is no such two patients exist.
 	 */
 	public static Patient[] findCompatiblePair(Patient[] patients) {
-		if(patients ==  null) {
-			return null;
-		}
 		Patient[] neue = new Patient[2];
-		Patient erste = patients[0];
-		Patient zweite = patients[1];
 		for(int i = 0; i < patients.length; i++) {
 			for(int j = i + 1; j < patients.length; j++) {
-				if(patients[i].getBloodRH() == patients[j].getBloodRH()) {
-					erste = patients[i];
-					zweite = patients[j];
+				if(patients[i].hasCompatibleRHFactor(patients[j])) {
+					neue[0] = patients[i];
+					neue[1] = patients[j];
+					return neue;
 				}
 			}
-			break;
+			
 		}
-		if(neue.length == 0) {
-			return null;
-		}
-		neue[0] = erste;
-		neue[1] = zweite;
-		return neue;
+		return null;
 	}
 
 	/**
@@ -194,14 +185,13 @@ public class Patient {
 	 * HINT: You may find the hasCompatibleRHFactor method useful
 	 */
 	public Patient[] findRecipients(Patient[] patients) {
+		if(patients.length == 0) return null;
+		
 		ArrayList<Patient> neue = new ArrayList<Patient>();
 		for(int i = 0; i < patients.length; i++) {
-			if((this.bloodRH == RH.POS) || (patients[i].getBloodRH() == RH.NEG)) {
+			if((this.hasCompatibleRHFactor(patients[i]))) {
 				neue.add(patients[i]);
 			}
-		}
-		if(neue.size() == 0) {
-			return null;
 		}
 		return neue.toArray(new Patient[0]);
 	}
